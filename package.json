@@ -1,0 +1,29 @@
+{
+  "name": "slutprojekt",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HannaAspblad/slutprojekt.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HannaAspblad/slutprojekt/issues"
+  },
+  "homepage": "https://github.com/HannaAspblad/slutprojekt#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^8.5.1",
+    "express": "^4.17.1",
+    "express-upload": "^0.1.0",
+    "jsonwebtoken": "^8.5.1",
+    "sequelize": "^6.6.2",
+    "sqlite3": "^5.0.2"
+  }
+}

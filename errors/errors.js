@@ -4,7 +4,7 @@ class InvalidBody extends TaskManagerError {
   constructor(fields) {
     super()
     this.fields = fields
-    this.message = `invalid body, require ${this.fields.join(", ")}`
+    this.message = `invalid body, require ${this.fields.join(" & ")}`
     this.errorCode = 400
   }
 }

@@ -1,4 +1,5 @@
 const User = require('../models/usersModel')
+const {InvalidBody} = require('../errors/errors.js')
 
 
 module.exports = {
@@ -9,7 +10,7 @@ module.exports = {
       const { username, password, role} = req.body
 
       if( !username || !password) {
-        throw new Error
+        throw new InvalidBody(['username','password'])
       }
 
       const user = await User.create({ username, password, role})
@@ -18,7 +19,13 @@ module.exports = {
     }catch(error) { next(error) }
   },
 
-
+  async login(req, res, next) {
+    try{
+      const { username, password } = req.body
+      const token = await User.authenticate(username, password)
+      res.json({ token, username})
+    } catch(error) { next(error) }
+  }
 
 
 

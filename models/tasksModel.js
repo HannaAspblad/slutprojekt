@@ -1,6 +1,8 @@
 const db = require("../database/connection.js")
 const { DataTypes } = require("sequelize")
 const Messages = require("../models/messagesModel")
+const User = require("../models/usersModel")
+
 
 const Task = db.define("Task", {
   description: {
@@ -19,11 +21,6 @@ const Task = db.define("Task", {
 })
 Task.hasMany(Messages)
 Messages.belongsTo(Task)
-
-Task.getTasks = async () => {
-  const tasks = await Task.findAll()
-  return tasks
-}
 
 Task.getTaskById = async (id) => {
   const task = await Task.findOne({ where: { id: id } })
@@ -58,6 +55,47 @@ Task.createTask = async (body) => {
   })
 
   return task
+}
+
+
+
+
+
+Task.getTasks = async (query, userID) => {
+ 
+  const { filter, search } = query
+  
+
+  if (search && filter == "done") {
+    const tasks = await Task.findAll({
+      where: {
+        done: 1,
+        CustomerID: userID,
+      },
+    })
+    return tasks
+  } else if (search && filter != "done") {
+    const tasks = await Task.findAll({
+      where: {
+        CustomerID: userID,
+      },
+    })
+    return tasks
+  }
+
+  if (Object.keys(query).length == 0 || filter == "all") {
+    const tasks = await Task.findAll()
+    return tasks
+  }
+  if (Object.keys(query).length == 0 || filter == "done") {
+    const tasks = await Task.findAll({
+      where: {
+        done: 1,
+      },
+    })
+
+    return tasks
+  }
 }
 
 module.exports = Task

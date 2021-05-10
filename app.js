@@ -4,12 +4,14 @@ require('dotenv').config()
 const app = express()
 const userRoutes = require('./routes/users')
 const tasksRoutes = require('./routes/tasks')
+const messagesRoutes = require('./routes/messages')
 const errorHandler = require('./middleware/errorHandler')
 
 app.use( express.json() )
 
 app.use('/api/v1', userRoutes)
 app.use('/api/v1', tasksRoutes)
+app.use('/api/v1', messagesRoutes)
 
 app.use(errorHandler)
 

@@ -1,12 +1,12 @@
 const Message = require('../models/messagesModel')
-const {InvalidBody} = require('../errors/errors')
+const {InvalidBody, Unauthorized} = require('../errors/errors')
 
 module.exports = {
 
     async getAll(req, res, next){
-        const user = req.params.id
+        const task = req.params.id
         try{
-            const messages = await Message.findAll({ where: { TaskId: user } })
+            const messages = await Message.findAll({ where: { TaskId: task } })
             res.json({messages})
         }catch(err){
             next(err)
@@ -15,21 +15,26 @@ module.exports = {
 
     async create(req, res, next){
         const text = req.body.text
-        const id = req.params.id
+        const task = req.params.id
         if(!text) {
             throw new InvalidBody(['text'])
           }
         try{
-            const message = await Message.create({text: text, TaskId: id})
+            const message = await Message.create({text: text, TaskId: task})
             res.json({message})
         }catch(err){next(err)}
     },
 
     async delete(req, res, next){
-        const id = req.body.id
+        const id = req.params.message
         try{
-            await Message.destroy({ where: {id: id} })
-            res.json({message: `Message with id ${id} deleted`})
+            const match = await Message.findOne({ where: {id: id, TaskId: req.params.id} })
+            if(match){
+                await Message.destroy({ where: {id: id, TaskId: req.params.id} })
+                res.json({message: `Message with id ${id} deleted`})
+            } else{
+                throw new Unauthorized()
+            }            
         }catch(err){next(err)}
     }
 

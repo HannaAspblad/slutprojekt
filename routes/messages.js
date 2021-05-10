@@ -4,7 +4,7 @@ const MessageController = require('../controllers/messagesController')
 
 router.get('/tasks/:id/messages', MessageController.getAll)
 router.post('/tasks/:id/messages', MessageController.create)
-router.delete('/tasks/:id/messages', MessageController.delete)
+router.delete('/tasks/:id/messages/:message', MessageController.delete)
 
 
 module.exports = router

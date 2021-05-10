@@ -28,7 +28,7 @@ module.exports = {
     async delete(req, res, next){
         const id = req.body.id
         try{
-            const message = await Message.destroy({ where: {id: id} })
+            await Message.destroy({ where: {id: id} })
             res.json({message: `Message with id ${id} deleted`})
         }catch(err){next(err)}
     }

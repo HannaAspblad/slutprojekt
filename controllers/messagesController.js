@@ -33,7 +33,7 @@ module.exports = {
                 await Message.destroy({ where: {id: id, TaskId: req.params.id} })
                 res.json({message: `Message with id ${id} deleted`})
             } else{
-                throw new Unauthorized()
+                throw new Unauthorized() //message and task does not match
             }            
         }catch(err){next(err)}
     }

@@ -29,10 +29,19 @@ class InvalidCredentials extends TaskManagerError{
     }
 }
 
+class NotMatchingMessage extends TaskManagerError{
+  constructor(){
+    super()
+    this.message = 'Message does not match task'
+    this.errorCode = 403
+  }
+}
+
 
 module.exports = {
 TaskManagerError,
 InvalidBody,
 Unauthorized,
-InvalidCredentials 
+InvalidCredentials,
+NotMatchingMessage 
 }

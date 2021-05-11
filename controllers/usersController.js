@@ -1,39 +1,68 @@
-const User = require('../models/usersModel')
-const {InvalidBody} = require('../errors/errors.js')
+const User = require("../models/usersModel")
+const { InvalidBody } = require("../errors/errors.js")
 
 
 module.exports = {
-
   async createUser(req, res, next) {
-    try{
+    try {
+      const { username, password, role } = req.body
 
-      const { username, password, role} = req.body
-
-      if( !username || !password) {
-        throw new InvalidBody(['username','password'])
+      if (!username || !password) {
+        throw new InvalidBody(["username", "password"])
       }
 
-      const user = await User.create({ username, password, role})
-      res.json({ message: 'User created!'})
-
-    }catch(error) { next(error) }
+      const user = await User.create({ username, password, role })
+      res.json({ message: "User created!" })
+    } catch (error) {
+      next(error)
+    }
   },
 
   async login(req, res, next) {
-    try{
+    try {
       const { username, password } = req.body
       const token = await User.authenticate(username, password)
-      res.json({ token, username})
-    } catch(error) { next(error) }
+      res.json({ token, username })
+    } catch (error) {
+      next(error)
+    }
   },
 
-
-  me(req, res, next){
+  me(req, res, next) {
     const user = req.user
-    res.json({user})
-  }
+    res.json({ user })
+  },
 
+  async updateMe(req, res, next) {
+    const { authorization } = req.headers
+    const token = authorization.replace("Bearer ", "")
 
+    try {
+      await User.updateMe(token, req.body)
+      res.json({ message: "user updated" })
+    } catch (error) {
+      res.json({ message: error })
+    }
+  },
 
+  async getUsers(req, res, next) {
+    try {
+      const users = await User.getUsers()
+      res.json(users)
+    } catch (error) {
+      res.json(error)
+    }
+  },
+
+  async getUserById(req, res, next) {
+
+    const id = req.params.id
+    try {
+      const user = await User.getUserById(id)
+      res.json(user)
+    } catch (error) {
+      res.json(error)
+    }
+  },
 
 }

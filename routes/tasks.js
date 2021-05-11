@@ -11,4 +11,6 @@ router.post("/tasks", tasksController.createTask)
 router.patch("/tasks/:id", tasksController.editTaskById)
 router.delete("/tasks/:id", tasksController.deleteTaskById)
 
+router.post('/tasks/:id/image', tasksController.uploadImg)
+
 module.exports = router

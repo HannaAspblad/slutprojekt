@@ -6,8 +6,10 @@ const userRoutes = require('./routes/users')
 const tasksRoutes = require('./routes/tasks')
 const messagesRoutes = require('./routes/messages')
 const errorHandler = require('./middleware/errorHandler')
+const fileUpload = require('express-fileupload')
 
 app.use( express.json() )
+app.use( fileUpload() )
 
 app.use('/api/v1', userRoutes)
 app.use('/api/v1', tasksRoutes)

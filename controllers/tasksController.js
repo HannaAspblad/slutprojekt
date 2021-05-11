@@ -73,10 +73,25 @@ async function getTasks(req, res, next) {
     res.json({ error: error })
   }
 }
+
+
+const uploadImg = async (req, res, next) => {
+  const img = req.files.pic
+  const id = req.params.id
+  try{
+    tasksModel.uploadImg(id, img)
+    res.json({message: `File successfully uploaded`})
+  }catch(err){
+    next(err)
+  }
+}
+
+
 module.exports = {
   getTasks,
   getTaskById,
   deleteTaskById,
   editTaskById,
   createTask,
+  uploadImg
 }

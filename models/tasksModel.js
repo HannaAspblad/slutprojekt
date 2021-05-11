@@ -1,6 +1,8 @@
 const db = require("../database/connection.js")
 const { DataTypes } = require("sequelize")
 const Messages = require("../models/messagesModel")
+const path = require('path')
+const { v4: uuid } = require('uuid')
 
 
 const Task = db.define("Task", {
@@ -101,5 +103,19 @@ Task.getTasks = async (query, userID) => {
     return tasks
   }
 }
+
+
+Task.uploadImg = async(id, img) => {
+  const extension = path.extname(img.name)
+  const fileName = uuid() + extension
+  const outputPath = path.join("uploads", fileName)
+  await Task.update(
+    { imageFile: fileName },
+    { where: { id: id } }
+  )
+  img.mv(outputPath)
+}
+
+
 
 module.exports = Task

@@ -12,6 +12,13 @@ function extractToken(headers) {
 
 
 module.exports = {
+  user: (req, res, next) => {
+    const token = extractToken(req.headers)
+    const user = User.validateToken(token)
+    req.user = user
+    console.log(user);
+    next()
+  },
   worker: (req, res, next) => {
     const token = extractToken(req.headers)
     const worker = User.validateToken(token)

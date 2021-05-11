@@ -4,6 +4,7 @@ const { InvalidBody } = require("../errors/errors.js")
 
 module.exports = {
   async createUser(req, res, next) {
+
     try {
       const { username, password, role } = req.body
 

@@ -67,7 +67,18 @@ User.validateToken = (token) => {
   }
 }
 
+User.updateMe = async (token, body) => {
+  const user = jwt.verify(token, process.env.JWT_SECRET)
+  const { id } = user
+  const { password, username, role } = body
 
+  const newPassword = bcrypt.hashSync(password, 10)
 
+  const patched = await User.update(
+    { username: username, role: role, password: newPassword },
+    { where: { id: id } }
+  )
+  return patched
+}
 
 module.exports = User

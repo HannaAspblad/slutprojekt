@@ -3,14 +3,23 @@ const User = require("../models/usersModel")
 
 async function getTaskById(req, res, next) {
   const id = req.params.id
-
-  try {
-    const task = await tasksModel.getTaskById(id)
-    res.json(task)
-  } catch (error) {
-    res.json({ error: error })
+  const userid = req.user.id
+  if (req.user.role == 'worker') {
+    try {
+      const task = await tasksModel.getTaskById(id)
+      res.json(task)
+    } catch (error) {
+      res.json({ error: error })
+    }
+  } else if (req.user.role == 'client') {
+    try { 
+      const ownertask = await tasksModel.getOwnTaskById(userid,id)
+      res.json(ownertask)
+    } catch (error) {
+      res.json({ error: error})
+    }
   }
-}
+} 
 
 async function deleteTaskById(req, res, next) {
   const id = req.params.id
@@ -46,7 +55,7 @@ async function createTask(req, res, next) {
 }
 
 async function getTasks(req, res, next) {
-  
+
   let customer = false
 
   if (req.query.search) {

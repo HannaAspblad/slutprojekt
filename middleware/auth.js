@@ -21,10 +21,10 @@ module.exports = {
   },
   workerClientAccess: (req, res, next) => {
     const token = extractToken(req.headers)
-    const workerClient = User.validateToken(token)
-    if (workerClient.role == 'worker' || workerClient.role == 'client') {
-      req.user = workerClient
-      console.log(workerClient);
+    const user = User.validateToken(token)
+    if (user.role == 'worker' || user.role == 'client') {
+      req.user = user
+      console.log(user);
       next()
     } else {
       throw new Unauthorized

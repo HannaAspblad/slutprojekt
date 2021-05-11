@@ -26,6 +26,11 @@ Task.getTaskById = async (id) => {
   return task
 }
 
+Task.getOwnTaskById = async (userid,id) => {
+  const task = await Task.findAll({ where: { CustomerID: userid, id:id } })
+  return task
+}
+
 Task.deleteTaskById = async (id) => {
   const task = await Task.destroy({ where: { id: id } })
   return task

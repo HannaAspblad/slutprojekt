@@ -57,7 +57,7 @@ module.exports = {
     const admin = User.validateToken(token)
     if (admin.role == 'admin') {
       req.user = admin
-      console.log(client);
+      console.log(admin);
       next()
     } else {
       throw new Unauthorized

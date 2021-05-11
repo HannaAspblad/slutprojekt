@@ -79,6 +79,21 @@ User.updateMe = async (token, body) => {
     { where: { id: id } }
   )
   return patched
+},
+
+User.getUsers = async ()=>{
+
+  const users = await User.findAll()
+  return users
+  
+},
+
+User.getUserById = async (id) =>{
+
+  const user = await User.findOne({where:{
+    id: id
+  }})
+  return user
 }
 
 module.exports = User

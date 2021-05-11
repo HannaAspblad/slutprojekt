@@ -10,5 +10,7 @@ router.post('/users', userController.createUser)
 router.post('/authenticate', userController.login)
 router.get('/me',Auth.client, userController.me)
 
+router.patch('/me', userController.updateMe)
+
 
 module.exports = router

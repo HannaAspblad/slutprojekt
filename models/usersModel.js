@@ -86,11 +86,11 @@ User.updateMe = async (token, body) => {
 
   User.getUsers = async (query, userId) => {
     
-    const { filter, search } = query
+    const { role, search } = query
 
     
 
-    if(search && filter =="all"){
+    if(search && role =="all"){
       const users = await User.findAll({
         where: {
           id: userId,
@@ -99,15 +99,15 @@ User.updateMe = async (token, body) => {
       return users
     }
 
-    if (search && filter) {
+    if (search && role) {
       const user = await User.findOne({
         where: {
           id: userId,
-          role: filter,
+          role: role,
         },
       })
       return user
-    }else if(search && !filter){
+    }else if(search && !role){
 
       const user = await User.findOne({
         where: {
@@ -117,13 +117,13 @@ User.updateMe = async (token, body) => {
       return user
     }
 
-    if (!filter || filter == "all") {
+    if (!role || role == "all") {
       const users = await User.findAll()
       return users
-    } else if (filter) {
+    } else if (role) {
       const users = await User.findAll({
         where: {
-          role: filter,
+          role: role,
         },
       })
       return users

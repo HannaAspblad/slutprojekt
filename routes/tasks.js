@@ -4,14 +4,22 @@ const router = new Router()
 const tasksController = require("../controllers/tasksController")
 const Auth = require("../middleware/auth")
 
+//worker&client
+router.get("/tasks", Auth.workerClientAccess, tasksController.getTasks)
 
-router.get("/tasks", tasksController.getTasks)
-router.post("/tasks", tasksController.createTask)
+//worker
+router.post("/tasks", Auth.workerAcess, tasksController.createTask)
 
+// klar
 router.get("/tasks/:id", Auth.workerClientAccess, tasksController.getTaskById)
-router.patch("/tasks/:id", tasksController.editTaskById)
-router.delete("/tasks/:id", tasksController.deleteTaskById)
 
-router.post('/tasks/:id/image', tasksController.uploadImg)
+//worker
+router.patch("/tasks/:id", Auth.workerAcess, tasksController.editTaskById)
+
+//admin
+router.delete("/tasks/:id", Auth.adminAcess, tasksController.deleteTaskById)
+
+// worker
+router.post('/tasks/:id/image', Auth.workerAcess, tasksController.uploadImg)
 
 module.exports = router

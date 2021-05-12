@@ -56,6 +56,10 @@ async function createTask(req, res, next) {
 
 async function getTasks(req, res, next) {
 
+  //client kan inte söka
+
+  //if(req.user.role == 'worker' && req.query.params)
+
   let customer = false
 
   if (req.query.search) {
@@ -70,7 +74,7 @@ async function getTasks(req, res, next) {
     const tasks = await tasksModel.getTasks(req.query, customer.id)
     res.json(tasks)
   } catch (error) {
-    res.json({ error: error })
+    next(error)
   }
 }
 

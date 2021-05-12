@@ -11,8 +11,8 @@ module.exports = {
       if (!username || !password) {
         throw new InvalidBody(["username", "password"])
       }
-
-      const user = await User.create({ username, password, role })
+      
+      await User.create({ username: username.toLowerCase(), password, role})
       res.json({ message: "User created!" })
     } catch (error) {
       next(error)

@@ -87,7 +87,8 @@ User.updateMe = async (token, body) => {
   User.getUsers = async (query, userId) => {
     
     const { role, search } = query
-
+//    const test = search.toLowerCase()
+// console.log(test)
     
 
     if(search && role =="all"){

@@ -67,6 +67,8 @@ User.validateToken = (token) => {
   }
 }
 
+
+
 User.updateMe = async (token, body) => {
   const user = jwt.verify(token, process.env.JWT_SECRET)
   const { id } = user
@@ -81,19 +83,64 @@ User.updateMe = async (token, body) => {
   return patched
 },
 
-User.getUsers = async ()=>{
 
-  const users = await User.findAll()
-  return users
-  
-},
+  User.getUsers = async (query, userId) => {
+    
+    const { filter, search } = query
 
-User.getUserById = async (id) =>{
+    
 
-  const user = await User.findOne({where:{
-    id: id
-  }})
-  return user
-}
+    if(search && filter =="all"){
+      const users = await User.findAll({
+        where: {
+          id: userId,
+        },
+      })
+      return users
+    }
+
+    if (search && filter) {
+      const user = await User.findOne({
+        where: {
+          id: userId,
+          role: filter,
+        },
+      })
+      return user
+    }else if(search && !filter){
+
+      const user = await User.findOne({
+        where: {
+          id: userId
+        },
+      })
+      return user
+    }
+
+    if (!filter || filter == "all") {
+      const users = await User.findAll()
+      return users
+    } else if (filter) {
+      const users = await User.findAll({
+        where: {
+          role: filter,
+        },
+      })
+      return users
+    }
+
+   
+  },
+
+
+
+  User.getUserById = async (id) => {
+    const user = await User.findOne({
+      where: {
+        id: id,
+      },
+    })
+    return user
+  }
 
 module.exports = User

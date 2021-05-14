@@ -64,14 +64,9 @@ Task.createTask = async (body) => {
 }
 
 
-
-
-
-Task.getTasks = async (query, userID) => {
- 
+// med search &/eller filter
+Task.getTaskBySearch = async (query, userID) => {
   const { filter, search } = query
-  
-
   if (search && filter == "done") {
     const tasks = await Task.findAll({
       where: {
@@ -88,7 +83,10 @@ Task.getTasks = async (query, userID) => {
     })
     return tasks
   }
+}
 
+//hämta alla med worker/user
+Task.getTasks = async (query, userID) => {
   if (Object.keys(query).length == 0 || filter == "all") {
     const tasks = await Task.findAll()
     return tasks

@@ -67,6 +67,8 @@ User.validateToken = (token) => {
   }
 }
 
+
+
 User.updateMe = async (token, body) => {
   const user = jwt.verify(token, process.env.JWT_SECRET)
   const { id } = user
@@ -81,19 +83,64 @@ User.updateMe = async (token, body) => {
   return patched
 },
 
-User.getUsers = async ()=>{
 
-  const users = await User.findAll()
-  return users
-  
-},
+  User.getUsers = async (query, userId) => {
+    
+    const { role, search } = query
+   
+//params ska bli till lowercase
 
-User.getUserById = async (id) =>{
+    if(search && role =="all"){
+      const users = await User.findAll({
+        where: {
+          id: userId,
+        },
+      })
+      return users
+    }
 
-  const user = await User.findOne({where:{
-    id: id
-  }})
-  return user
-}
+    if (search && role) {
+      const user = await User.findOne({
+        where: {
+          id: userId,
+          role: role,
+        },
+      })
+      return user
+    }else if(search && !role){
+
+      const user = await User.findOne({
+        where: {
+          id: userId
+        },
+      })
+      return user
+    }
+
+    if (!role || role == "all") {
+      const users = await User.findAll()
+      return users
+    } else if (role) {
+      const users = await User.findAll({
+        where: {
+          role: role,
+        },
+      })
+      return users
+    }
+
+   
+  },
+
+
+
+  User.getUserById = async (id) => {
+    const user = await User.findOne({
+      where: {
+        id: id,
+      },
+    })
+    return user
+  }
 
 module.exports = User

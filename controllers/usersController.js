@@ -11,8 +11,8 @@ module.exports = {
       if (!username || !password) {
         throw new InvalidBody(["username", "password"])
       }
-
-      const user = await User.create({ username, password, role })
+      
+      await User.create({ username: username.toLowerCase(), password, role})
       res.json({ message: "User created!" })
     } catch (error) {
       next(error)
@@ -47,8 +47,20 @@ module.exports = {
   },
 
   async getUsers(req, res, next) {
+
+    let user = false
+
+    if (req.query.search) {
+      user = await User.findOne({
+        where: {
+          username: req.query.search,
+        },
+      })
+    }
+
+  //if NULL ? 
     try {
-      const users = await User.getUsers()
+      const users = await User.getUsers(req.query, user.id)
       res.json(users)
     } catch (error) {
       res.json(error)

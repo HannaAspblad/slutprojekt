@@ -37,11 +37,20 @@ class NotMatchingMessage extends TaskManagerError{
   }
 }
 
+class NoExsistingTasks extends TaskManagerError{
+  constructor(){
+    super()
+    this.message = 'No tasks found'
+    this.errorCode = 404
+  }
+}
+
 
 module.exports = {
 TaskManagerError,
 InvalidBody,
 Unauthorized,
 InvalidCredentials,
-NotMatchingMessage 
+NotMatchingMessage,
+NoExsistingTasks
 }

@@ -57,6 +57,8 @@ module.exports = {
         },
       })
     }
+
+  //if NULL ? 
     try {
       const users = await User.getUsers(req.query, user.id)
       res.json(users)

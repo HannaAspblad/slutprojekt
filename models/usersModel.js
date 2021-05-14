@@ -87,8 +87,8 @@ User.updateMe = async (token, body) => {
   User.getUsers = async (query, userId) => {
     
     const { role, search } = query
-
-    
+   
+//params ska bli till lowercase
 
     if(search && role =="all"){
       const users = await User.findAll({

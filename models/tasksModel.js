@@ -3,6 +3,7 @@ const { DataTypes } = require("sequelize")
 const Messages = require("../models/messagesModel")
 const path = require('path')
 const { v4: uuid } = require('uuid')
+const User = require('../models/usersModel')
 
 
 const Task = db.define("Task", {
@@ -28,8 +29,8 @@ Task.getTaskById = async (id) => {
   return task
 }
 
-Task.getOwnTaskById = async (userid,id) => {
-  const task = await Task.findAll({ where: { CustomerID: userid, id:id } })
+Task.getOwnTaskById = async (userid, id) => {
+  const task = await Task.findAll({ where: { CustomerID: userid, id: id } })
   return task
 }
 
@@ -66,46 +67,97 @@ Task.createTask = async (body) => {
 
 
 
+// [Op.substring]
 
-Task.getTasks = async (query, userID) => {
- 
-  const { filter, search } = query
-  
 
-  if (search && filter == "done") {
+
+Task.getTasksAdmin = async (client, filter) => {
+
+
+  console.log(filter)
+  console.log(client)
+  if (client && filter == 'done') {
     const tasks = await Task.findAll({
       where: {
-        done: 1,
-        CustomerID: userID,
-      },
+        done: true,
+        CustomerID: client
+      }
     })
     return tasks
-  } else if (search && filter != "done") {
+  } else if (client && filter == 'all' || client && !filter) {
     const tasks = await Task.findAll({
       where: {
-        CustomerID: userID,
-      },
+        CustomerID: client
+      }
     })
     return tasks
-  }
-
-  if (Object.keys(query).length == 0 || filter == "all") {
-    const tasks = await Task.findAll()
-    return tasks
-  }
-  if (Object.keys(query).length == 0 || filter == "done") {
+  } else if (!client && filter == 'done') {
     const tasks = await Task.findAll({
       where: {
-        done: 1,
-      },
+        done: true
+      }
     })
-
     return tasks
+  } else if (!client && filter == 'all' || !client && !filter) {
+    return await Task.findAll()
+  } else {
+    throw Error
   }
+
+}
+
+Task.getTasksWorker = async (client, filter, user) => {
+
+
+  console.log(filter)
+  console.log(client)
+  if (client && filter == 'done') {
+    const tasks = await Task.findAll({
+      where: {
+        done: true,
+        CustomerID: client,
+        OwnerID: user
+      }
+    })
+    return tasks
+  } else if (client && filter == 'all' || client && !filter) {
+    const tasks = await Task.findAll({
+      where: {
+        CustomerID: client,
+        OwnerID: user
+      }
+    })
+    return tasks
+  } else if (!client && filter == 'done') {
+    const tasks = await Task.findAll({
+      where: {
+        done: true,
+        OwnerID: user
+      }
+    })
+    return tasks
+  } else if (!client && filter == 'all' || !client && !filter) {
+    return await Task.findAll({
+      where: {
+        OwnerID: user
+      }
+    })
+  } else {
+    throw Error
+  }
+
+}
+
+Task.getTasksClient = async (user) => {
+  return await Task.findAll({
+    where: {
+      CustomerID: user
+    }
+  })
 }
 
 
-Task.uploadImg = async(id, img) => {
+Task.uploadImg = async (id, img) => {
   const extension = path.extname(img.name)
   const fileName = uuid() + extension
   const outputPath = path.join("uploads", fileName)

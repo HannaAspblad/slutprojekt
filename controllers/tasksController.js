@@ -56,22 +56,38 @@ async function createTask(req, res, next) {
 
 async function getTasks(req, res, next) {
 
-  let customer = false
+let {search, filter} = req.query 
+ 
+try{
 
-  if (req.query.search) {
-    customer = await User.findOne({
-      where: {
-        username: req.query.search,
-      },
-    })
+  if(req.user.role == 'admin'){
+   if(search){
+     const client = await User.findUser(search)
+     const tasks = await tasksModel.getTasksAdmin(client.id,filter)
+     res.json({tasks})
+    } else {
+      search = false
+      const tasks = await tasksModel.getTasksAdmin(search,filter)
+      res.json({tasks})
+    }
+  } else if(req.user.role == 'worker'){
+    if(search){
+      const client = await User.findOne({where: {username: search }})
+      const tasks = await tasksModel.getTasksWorker(client.id,filter, req.user.id)
+      res.json({tasks})
+     } else {
+       console.log(req.user.id);
+       search = false
+       const tasks = await tasksModel.getTasksWorker(search,filter, req.user.id)
+       res.json({tasks})
+     }
+  } else if(req.user.role == 'client'){
+    const tasks = await tasksModel.getTasksClient(req.user.id)
+    res.json({tasks})
   }
-
-  try {
-    const tasks = await tasksModel.getTasks(req.query, customer.id)
-    res.json(tasks)
-  } catch (error) {
-    res.json({ error: error })
-  }
+} catch (error) {
+  next(error)
+}
 }
 
 

@@ -51,11 +51,7 @@ module.exports = {
     let user = false
 
     if (req.query.search) {
-      user = await User.findOne({
-        where: {
-          username: req.query.search,
-        },
-      })
+      user = await User.findUser(req.query.search)
     }
 
   //if NULL ? 

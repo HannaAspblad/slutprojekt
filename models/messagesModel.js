@@ -1,6 +1,6 @@
 const db = require('../database/connection.js')
 const {DataTypes} = require('sequelize')
-const { NoneExsistingTasks } = require('../errors/errors.js')
+const { NoExsistingTasks } = require('../errors/errors.js')
 
 
 const Message = db.define('Message', {
@@ -15,7 +15,7 @@ Message.findAllSorted = async (page, task) => {
     const messages = await Message.findAll({where: { TaskId: task }, offset: (page -1) * 5, limit: 5, order: ['createdAt']})
     return messages
   } catch(err){
-    throw new NoneExsistingTasks()
+    throw new NoExsistingTasks()
   }
 }
 

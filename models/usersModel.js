@@ -1,5 +1,5 @@
 const db = require("../database/connection.js")
-const { DataTypes } = require("sequelize")
+const { DataTypes, Op } = require("sequelize")
 const Messages = require("../models/messagesModel")
 const Task = require("../models/tasksModel")
 const bcrypt = require("bcryptjs")
@@ -142,5 +142,22 @@ User.updateMe = async (token, body) => {
     })
     return user
   }
+
+
+  User.findUser = async (name) => {
+    try{
+   const user = User.findOne({
+     where:{
+       username: {
+        [Op.substring]: name
+       }
+     //[Op.substring]: [{username: name}]
+    }
+   })
+   return user
+  } catch(error){
+    throw Error
+  }
+}
 
 module.exports = User

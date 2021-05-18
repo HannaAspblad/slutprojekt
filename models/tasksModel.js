@@ -3,6 +3,7 @@ const { DataTypes } = require("sequelize")
 const Messages = require("../models/messagesModel")
 const path = require('path')
 const { v4: uuid } = require('uuid')
+const { Unauthorized } = require("../errors/errors.js")
 
 
 
@@ -168,6 +169,19 @@ Task.uploadImg = async (id, img) => {
   img.mv(outputPath)
 }
 
+Task.checkTask = async (user, task) => {
+  let Auth
+  if(user.role == 'worker'){
+    Auth = await Task.findOne({where: { id: task, OwnerId: user.id}})
+  } else if(user.role == 'client'){
+    Auth = await Task.findOne({where: { id: task, CustomerId: user.id}})
+  }
+  if(Auth){
+    return true
+  } else {
+    throw new Unauthorized()
+  }
+}
 
 
 module.exports = Task

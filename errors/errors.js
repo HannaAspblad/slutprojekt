@@ -37,10 +37,10 @@ class NotMatchingMessage extends TaskManagerError{
   }
 }
 
-class NoExsistingTasks extends TaskManagerError{
+class NoExistingMessages extends TaskManagerError{
   constructor(){
     super()
-    this.message = 'No tasks found'
+    this.message = 'Could not find any messages'
     this.errorCode = 404
   }
 }
@@ -52,5 +52,5 @@ InvalidBody,
 Unauthorized,
 InvalidCredentials,
 NotMatchingMessage,
-NoExsistingTasks
+NoExistingMessages
 }

@@ -1,14 +1,15 @@
 const Message = require('../models/messagesModel')
 const {InvalidBody, NotMatchingMessage} = require('../errors/errors')
+const Task = require('../models/tasksModel')
 
 module.exports = {
 
     async getAll(req, res, next){
-        const page = req.params.page
+        const page = req.query.page
         const task = req.params.id
-        console.log('controller');
         try{
-            const messages = await Message.findAllSorted(page, task)
+            const CheckTask = await Task.checkTask(req.user, task)
+            const messages = await Message.getMessages(page, task)
             res.json({messages})
         }catch(err){next(err)}
     },

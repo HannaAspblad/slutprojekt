@@ -69,16 +69,15 @@ User.validateToken = (token) => {
 
 
 
-User.updateMe = async (token, body) => {
-  const user = jwt.verify(token, process.env.JWT_SECRET)
-  const { id } = user
+User.updateMe = async (body, userid) => {
+ 
   const { password, username, role } = body
 
   const newPassword = bcrypt.hashSync(password, 10)
 
   const patched = await User.update(
     { username: username, role: role, password: newPassword },
-    { where: { id: id } }
+    { where: { id: userid } }
   )
   return patched
 },
@@ -148,10 +147,7 @@ User.updateMe = async (token, body) => {
     try{
    const user = User.findOne({
      where:{
-       username: {
-        [Op.substring]: name
-       }
-     //[Op.substring]: [{username: name}]
+       username: {[Op.substring]: name}
     }
    })
    return user

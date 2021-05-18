@@ -47,7 +47,7 @@ async function createTask(req, res, next) {
   const body = req.body
 
   try {
-    await tasksModel.createTask(body)
+    await tasksModel.createTask(body,req.user.id)
     res.json({ message: `successfully added new task` })
   } catch (error) {
     res.json({ error: error })
@@ -72,7 +72,7 @@ try{
     }
   } else if(req.user.role == 'worker'){
     if(search){
-      const client = await User.findOne({where: {username: search }})
+      const client = await User.findUser(search)
       const tasks = await tasksModel.getTasksWorker(client.id,filter, req.user.id)
       res.json({tasks})
      } else {

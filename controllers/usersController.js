@@ -35,11 +35,11 @@ module.exports = {
   },
 
   async updateMe(req, res, next) {
-    const { authorization } = req.headers
-    const token = authorization.replace("Bearer ", "")
+    // const { authorization } = req.headers
+    // const token = authorization.replace("Bearer ", "")
 
     try {
-      await User.updateMe(token, req.body)
+      await User.updateMe(req.body, req.user.id)
       res.json({ message: "user updated" })
     } catch (error) {
       res.json({ message: error })

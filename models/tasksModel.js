@@ -3,7 +3,7 @@ const { DataTypes } = require("sequelize")
 const Messages = require("../models/messagesModel")
 const path = require('path')
 const { v4: uuid } = require('uuid')
-const User = require('../models/usersModel')
+
 
 
 const Task = db.define("Task", {
@@ -19,6 +19,7 @@ const Task = db.define("Task", {
   done: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
+    defaultValue: false
   },
 })
 Task.hasMany(Messages)
@@ -50,13 +51,12 @@ Task.editTaskById = async (id, body) => {
   return task
 }
 
-Task.createTask = async (body) => {
-  const { description, done, OwnerID, CustomerID, imageFile } = body
+Task.createTask = async (body, user) => {
+  const { description, CustomerID, imageFile } = body
 
   const task = await Task.create({
     description: description,
-    done: done,
-    OwnerID: OwnerID,
+    OwnerID: user,
     CustomerID: CustomerID,
     imageFile: imageFile,
   })

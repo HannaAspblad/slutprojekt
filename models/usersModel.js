@@ -86,7 +86,7 @@ User.updateMe = async (body, userid) => {
   User.getUsers = async (query, userId) => {
     
     let { role, search } = query
-    role = role.toLowerCase()
+    
 
     if(role && role !== 'worker' && role !== 'admin' && role !== 'client' && role !== 'all'){
         throw new NotValidRole()

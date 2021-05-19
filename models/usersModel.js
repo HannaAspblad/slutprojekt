@@ -85,9 +85,9 @@ User.updateMe = async (body, userid) => {
 
   User.getUsers = async (query, userId) => {
     
-    const { role, search } = query
-       
-//params ska bli till lowercasei
+    let { role, search } = query
+    role = role.toLowerCase()
+
     if(role && role !== 'worker' && role !== 'admin' && role !== 'client' && role !== 'all'){
         throw new NotValidRole()
     }

@@ -12,7 +12,7 @@ module.exports = {
         throw new InvalidBody(["username", "password"])
       }
       
-      await User.create({ username: username.toLowerCase(), password, role})
+      await User.create({ username: username.toLowerCase().replace(" ",""), password, role})
       res.json({ message: "User created!" })
     } catch (error) {
       next(error)
@@ -35,8 +35,8 @@ module.exports = {
   },
 
   async updateMe(req, res, next) {
-    // const { authorization } = req.headers
-    // const token = authorization.replace("Bearer ", "")
+    
+
 
     try {
       await User.updateMe(req.body, req.user.id)

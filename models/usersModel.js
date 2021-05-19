@@ -4,7 +4,7 @@ const Messages = require("../models/messagesModel")
 const Task = require("../models/tasksModel")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
-const { InvalidCredentials, Unauthorized, UserNotFound } = require("../errors/errors.js")
+const { InvalidCredentials, Unauthorized, UserNotFound, NotValidRole } = require("../errors/errors.js")
 
 const User = db.define("User", {
   username: {
@@ -86,8 +86,11 @@ User.updateMe = async (body, userid) => {
   User.getUsers = async (query, userId) => {
     
     const { role, search } = query
-   
-//params ska bli till lowercase
+       
+//params ska bli till lowercasei
+    if(role && role !== 'worker' && role !== 'admin' && role !== 'client' && role !== 'all'){
+        throw new NotValidRole()
+    }
 
     if(search && role =="all"){
       const users = await User.findAll({
@@ -128,6 +131,7 @@ User.updateMe = async (body, userid) => {
       return users
     }
 
+    
    
   },
 
@@ -174,7 +178,7 @@ User.deleteUser = async (id) => {
   if(user !== null){
     return User.destroy({where: {id: id}})
   } else {
-    throw new UserNotFound(id)
+    throw new UserNotFound()
   }
 }
 

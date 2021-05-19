@@ -46,13 +46,20 @@ class NoExistingMessages extends TaskManagerError{
 }
 
 class UserNotFound extends TaskManagerError{
-  constructor(id){
+  constructor(){
     super()
-    this.message = `Could not find user with id ${id}`
+    this.message = `Could not find user`
     this.errorCode = 404
   }
 }
 
+class NotValidRole extends TaskManagerError{
+  constructor(){
+    super()
+    this.message = `Role not found`
+    this.errorCode = 404
+  }
+}
 
 module.exports = {
 TaskManagerError,
@@ -61,5 +68,6 @@ Unauthorized,
 InvalidCredentials,
 NotMatchingMessage,
 NoExistingMessages,
-UserNotFound
+UserNotFound,
+NotValidRole
 }

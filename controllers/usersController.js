@@ -1,5 +1,5 @@
 const User = require("../models/usersModel")
-const { InvalidBody } = require("../errors/errors.js")
+const { InvalidBody, UserNotFound } = require("../errors/errors.js")
 
 
 module.exports = {
@@ -49,13 +49,11 @@ module.exports = {
   async getUsers(req, res, next) {
 
     let user = false
-
-    if (req.query.search) {
-      user = await User.findUser(req.query.search)
-    }
-
-  //if NULL ? 
     try {
+      if (req.query.search) {
+      user = await User.findUser(req.query.search)
+      if(user == null){throw new UserNotFound()}
+      }
       const users = await User.getUsers(req.query, user.id)
       res.json(users)
     } catch (error) {

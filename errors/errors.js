@@ -45,6 +45,14 @@ class NoExistingMessages extends TaskManagerError{
   }
 }
 
+class UserNotFound extends TaskManagerError{
+  constructor(id){
+    super()
+    this.message = `Could not find user with id ${id}`
+    this.errorCode = 404
+  }
+}
+
 
 module.exports = {
 TaskManagerError,
@@ -52,5 +60,6 @@ InvalidBody,
 Unauthorized,
 InvalidCredentials,
 NotMatchingMessage,
-NoExistingMessages
+NoExistingMessages,
+UserNotFound
 }

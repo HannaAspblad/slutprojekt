@@ -74,4 +74,22 @@ module.exports = {
     }
   },
 
+  async updateUser(req, res, next){
+    const id = req.params.id
+    try{
+      const user = await User.updateUser(req.body, id)
+      res.json({message: `User with id ${id} updated`})
+    }catch(err){
+      next(err)
+    }
+  },
+
+  async deleteUser(req, res, next){
+    const id = req.params.id
+    try{
+      const user = await User.deleteUser(id)
+      res.json({message: `User with id ${id} deleted`})
+    }catch(err){next(err)}
+  }
+
 }

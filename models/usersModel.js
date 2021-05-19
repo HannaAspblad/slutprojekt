@@ -4,7 +4,7 @@ const Messages = require("../models/messagesModel")
 const Task = require("../models/tasksModel")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
-const { InvalidCredentials, Unauthorized } = require("../errors/errors.js")
+const { InvalidCredentials, Unauthorized, UserNotFound } = require("../errors/errors.js")
 
 const User = db.define("User", {
   username: {
@@ -153,6 +153,28 @@ User.updateMe = async (body, userid) => {
    return user
   } catch(error){
     throw Error
+  }
+}
+
+User.updateUser = async (body, userid) => {
+ 
+  const { password, username, role } = body
+  const newPassword = bcrypt.hashSync(password, 10)
+
+  const patched = await User.update(
+    { username: username, role: role, password: newPassword },
+    { where: { id: userid } }
+  )
+  return patched
+}
+
+User.deleteUser = async (id) => {
+
+  const user = await User.findOne({where: {id: id}})
+  if(user !== null){
+    return User.destroy({where: {id: id}})
+  } else {
+    throw new UserNotFound(id)
   }
 }
 

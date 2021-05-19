@@ -14,5 +14,7 @@ router.patch('/me', auth.general, userController.updateMe)
 router.get('/users', auth.workerAdminAccess, userController.getUsers)
 router.get('/users/:id', auth.adminAcess, userController.getUserById)
 
+router.patch('/users/:id', auth.adminAcess, userController.updateUser)
+router.delete('/users/:id', auth.adminAcess, userController.deleteUser)
 
 module.exports = router

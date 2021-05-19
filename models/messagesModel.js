@@ -1,6 +1,6 @@
 const db = require('../database/connection.js')
 const {DataTypes} = require('sequelize')
-const { NoExistingMessages } = require('../errors/errors.js')
+const { NoExistingMessages, Unauthorized } = require('../errors/errors.js')
 
 
 const Message = db.define('Message', {
@@ -12,7 +12,7 @@ const Message = db.define('Message', {
 
 Message.getMessages = async (page, taskId) => {
   !page ? page = 1 : page = page
-  const messages = await Message.findAll({where: { TaskId: taskId,  }, offset: (page -1) * 5, limit: 5, order: ['createdAt']})
+  const messages = await Message.findAll({ where: { TaskId: taskId,  }, offset: (page -1) * 5, limit: 5, order: ['createdAt'] })
   if(messages.length > 1){
     return messages
   } else {
@@ -28,12 +28,17 @@ Message.matchTask = async (message, task) => {
   }
 }
 
-Message.deleteMessage = async (message, task) => {
-  await Message.destroy({ where: {id: message, TaskId: task} })
+Message.deleteMessage = async (message, task, user) => {
+  const msg = await Message.findOne({ where: {id: message, TaskId: task, UserId: user} })
+  if(msg == null){
+    throw new Unauthorized()
+  } else {
+    return await Message.destroy({ where: {id: message, TaskId: task, UserId: user} })
+  }
 }  
 
-Message.createMessage = async (text, task) => {
-  return await Message.create({ text: text, TaskId: task })
+Message.createMessage = async (text, task, user) => {
+  return await Message.create({ text: text, TaskId: task, UserId: user })
 }
 
 

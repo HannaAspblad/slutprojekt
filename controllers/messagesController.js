@@ -19,7 +19,8 @@ module.exports = {
         const task = req.params.id
         if(!text) {throw new InvalidBody(['text'])}
         try{
-            const message = await Message.createMessage(text, task)
+            const CheckTask = await Task.checkTask(req.user, task)
+            const message = await Message.createMessage(text, task, req.user.id)
             res.json({message})
         }catch(err){next(err)}
     },
@@ -28,8 +29,9 @@ module.exports = {
         const message = req.params.message
         const task = req.params.id
         try{
+            const CheckTask = await Task.checkTask(req.user, task)
             if(await Message.matchTask(message, task)){
-                await Message.deleteMessage(message, task)
+                await Message.deleteMessage(message, task, req.user.id)
                 res.json({message: `Message with id ${message} deleted`})
             } else{throw new NotMatchingMessage()
             }            

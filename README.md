@@ -11,7 +11,7 @@
 ## Tekniker
 - Node
 - Express
-- Mongoose eller SQLite
+- SQLite
 - JWT
 - Bcrypt
 - JSON

@@ -7,5 +7,4 @@ router.get('/tasks/:id/messages', Auth.workerClientAccess, MessageController.get
 router.post('/tasks/:id/messages', Auth.workerClientAccess, MessageController.create)
 router.delete('/tasks/:id/messages/:message', Auth.workerClientAccess, MessageController.delete)
 
-
 module.exports = router

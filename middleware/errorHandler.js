@@ -3,7 +3,6 @@ const {BaseError} = require("sequelize")
 
 
 function errorHandler(error, req,res,next){
-
     if(error instanceof TaskManagerError){
         res
         .status(error.errorCode)
@@ -11,13 +10,11 @@ function errorHandler(error, req,res,next){
     }else if(error instanceof BaseError){
         res
         .status(400)
-        .json({error: error.message}) //hur kommer det från sequelize, där heter nyckeln msg
+        .json({error: error.message})
     }else{
         res.status(500)
         .json({error: "something went wrong"})
     }
-
-
 }
 
 

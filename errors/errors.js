@@ -10,22 +10,18 @@ class InvalidBody extends TaskManagerError {
 }
 
 class Unauthorized extends TaskManagerError{
-
     constructor(){
         super()
         this.message = "unauthorized"
         this.errorCode = 401
-
     }
 }
 
 class InvalidCredentials extends TaskManagerError{
-
     constructor(){
         super()
         this.message = "invalid credentials"
         this.errorCode = 403
-
     }
 }
 

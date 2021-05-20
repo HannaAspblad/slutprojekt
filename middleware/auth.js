@@ -16,7 +16,6 @@ module.exports = {
     const token = extractToken(req.headers)
     const user = User.validateToken(token)
     req.user = user
-    //console.log(user);
     next()
   },
   workerClientAccess: (req, res, next) => {
@@ -24,7 +23,6 @@ module.exports = {
     const user = User.validateToken(token)
     if (user.role == 'worker' || user.role == 'client') {
       req.user = user
-      //console.log(user);
       next()
     } else {
       throw new Unauthorized
@@ -35,7 +33,6 @@ module.exports = {
     const user = User.validateToken(token)
     if (user.role == 'worker' || user.role == 'admin') {
       req.user = user
-      //console.log(user);
       next()
     } else {
       throw new Unauthorized
@@ -46,7 +43,6 @@ module.exports = {
     const user = User.validateToken(token)
     if (user.role == 'worker') {
       req.user = user
-      //console.log(worker);
       next()
     } else {
       throw new Unauthorized
@@ -57,7 +53,6 @@ module.exports = {
     const user = User.validateToken(token)
     if (user.role == 'admin') {
       req.user = user
-      //console.log(user);
       next()
     } else {
       throw new Unauthorized

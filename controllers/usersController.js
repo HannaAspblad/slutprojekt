@@ -4,14 +4,11 @@ const { InvalidBody, UserNotFound } = require("../errors/errors.js")
 
 module.exports = {
   async createUser(req, res, next) {
-
     try {
       const { username, password, role } = req.body
-
       if (!username || !password) {
         throw new InvalidBody(["username", "password"])
       }
-      
       await User.create({ username: username.toLowerCase().replace(" ",""), password, role})
       res.json({ message: "User created!" })
     } catch (error) {
@@ -35,19 +32,15 @@ module.exports = {
   },
 
   async updateMe(req, res, next) {
-    
-
-
     try {
       await User.updateMe(req.body, req.user.id)
       res.json({ message: "user updated" })
     } catch (error) {
-      res.json({ message: error })
+      next(error)
     }
   },
 
   async getUsers(req, res, next) {
-
     let user = false
     try {
       if (req.query.search) {
@@ -57,18 +50,17 @@ module.exports = {
       const users = await User.getUsers(req.query, user.id)
       res.json(users)
     } catch (error) {
-      res.json(error)
+      next(error)
     }
   },
 
   async getUserById(req, res, next) {
-
     const id = req.params.id
     try {
       const user = await User.getUserById(id)
       res.json(user)
     } catch (error) {
-      res.json(error)
+      next(error)
     }
   },
 
@@ -91,4 +83,3 @@ module.exports = {
   }
 
 }
-//test för git

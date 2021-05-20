@@ -70,11 +70,8 @@ User.validateToken = (token) => {
 
 
 User.updateMe = async (body, userid) => {
- 
   const { password, username, role } = body
-
   const newPassword = bcrypt.hashSync(password, 10)
-
   const patched = await User.update(
     { username: username, role: role, password: newPassword },
     { where: { id: userid } }
@@ -84,14 +81,10 @@ User.updateMe = async (body, userid) => {
 
 
   User.getUsers = async (query, userId) => {
-    
     let { role, search } = query
-    
-
     if(role && role !== 'worker' && role !== 'admin' && role !== 'client' && role !== 'all'){
         throw new NotValidRole()
     }
-
     if(search && role =="all"){
       const users = await User.findAll({
         where: {
@@ -100,7 +93,6 @@ User.updateMe = async (body, userid) => {
       })
       return users
     }
-
     if (search && role) {
       const user = await User.findOne({
         where: {
@@ -118,7 +110,6 @@ User.updateMe = async (body, userid) => {
       })
       return user
     }
-
     if (!role || role == "all") {
       const users = await User.findAll()
       return users
@@ -130,12 +121,8 @@ User.updateMe = async (body, userid) => {
       })
       return users
     }
-
-    
-   
   },
 
-//test flr git
 
   User.getUserById = async (id) => {
     const user = await User.findOne({
@@ -161,10 +148,8 @@ User.updateMe = async (body, userid) => {
 }
 
 User.updateUser = async (body, userid) => {
- 
   const { password, username, role } = body
   const newPassword = bcrypt.hashSync(password, 10)
-
   const patched = await User.update(
     { username: username, role: role, password: newPassword },
     { where: { id: userid } }
@@ -173,7 +158,6 @@ User.updateUser = async (body, userid) => {
 }
 
 User.deleteUser = async (id) => {
-
   const user = await User.findOne({where: {id: id}})
   if(user !== null){
     return User.destroy({where: {id: id}})

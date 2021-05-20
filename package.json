@@ -21,9 +21,11 @@
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.5.1",
     "express": "^4.17.1",
+    "express-fileupload": "^1.2.1",
     "express-upload": "^0.1.0",
     "jsonwebtoken": "^8.5.1",
     "sequelize": "^6.6.2",
-    "sqlite3": "^5.0.2"
+    "sqlite3": "^5.0.2",
+    "uuid": "^8.3.2"
   }
 }

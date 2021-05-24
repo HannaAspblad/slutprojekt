@@ -1,18 +1,16 @@
 const User = require("../models/usersModel")
 const { InvalidBody, UserNotFound } = require("../errors/errors.js")
 
-
 module.exports = {
   async createUser(req, res, next) {
-
     try {
       const { username, password, role } = req.body
 
       if (!username || !password) {
         throw new InvalidBody(["username", "password"])
       }
-      
-      await User.create({ username: username.toLowerCase().replace(" ",""), password, role})
+
+      await User.create({ username: username.replace(/\s/g,''), password, role })
       res.json({ message: "User created!" })
     } catch (error) {
       next(error)
@@ -35,9 +33,6 @@ module.exports = {
   },
 
   async updateMe(req, res, next) {
-    
-
-
     try {
       await User.updateMe(req.body, req.user.id)
       res.json({ message: "user updated" })
@@ -47,12 +42,14 @@ module.exports = {
   },
 
   async getUsers(req, res, next) {
-
     let user = false
+
     try {
       if (req.query.search) {
-      user = await User.findUser(req.query.search)
-      if(user == null){throw new UserNotFound()}
+        user = await User.findUser(req.query.search.replace(/\s/g,''))
+      }
+      if (user == null) {
+        throw new UserNotFound()
       }
       const users = await User.getUsers(req.query, user.id)
       res.json(users)
@@ -62,7 +59,6 @@ module.exports = {
   },
 
   async getUserById(req, res, next) {
-
     const id = req.params.id
     try {
       const user = await User.getUserById(id)
@@ -72,23 +68,24 @@ module.exports = {
     }
   },
 
-  async updateUser(req, res, next){
+  async updateUser(req, res, next) {
     const id = req.params.id
-    try{
+    try {
       const user = await User.updateUser(req.body, id)
-      res.json({message: `User with id ${id} updated`})
-    }catch(err){
+      res.json({ message: `User with id ${id} updated` })
+    } catch (err) {
       next(err)
     }
   },
 
-  async deleteUser(req, res, next){
+  async deleteUser(req, res, next) {
     const id = req.params.id
-    try{
+    try {
       const user = await User.deleteUser(id)
-      res.json({message: `User with id ${id} deleted`})
-    }catch(err){next(err)}
-  }
-
+      res.json({ message: `User with id ${id} deleted` })
+    } catch (err) {
+      next(err)
+    }
+  },
 }
 //test för git

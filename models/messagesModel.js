@@ -13,7 +13,7 @@ const Message = db.define('Message', {
 Message.getMessages = async (page, taskId) => {
   !page ? page = 1 : page = page
   const messages = await Message.findAll({ where: { TaskId: taskId,  }, offset: (page -1) * 5, limit: 5, order: ['createdAt'] })
-  if(messages.length > 1){
+  if(messages.length > 0){
     return messages
   } else {
     throw new NoExistingMessages()
